@@ -1,0 +1,211 @@
+<?xml version="1.0"?>
+<robot name="turtlebot3_burger_cam" xmlns:xacro="http://ros.org/wiki/xacro">
+  <material name="red2">
+    <color rgba="1.0 0.0 0.0 2.0"/>
+  </material>
+
+  <xacro:macro name="camera_macro" params="parent prefix xyz">
+    <joint name="${prefix}_joint" type="fixed">
+      <parent link="${parent}"/>
+      <child  link="${prefix}_link"/>
+      <origin xyz="${xyz}" rpy="${radians(-90)} 0 ${radians(-90)}"/>
+    </joint>
+
+    <link name="${prefix}_link">
+      <visual>
+        <geometry>
+          <box size="0.03 0.03 0.03" />
+        </geometry>
+        <origin xyz="0 -0.03 -0.07" rpy="0 0 0 " />
+        <material name="red2"/>
+      </visual>
+
+    </link>
+    <gazebo reference="${prefix}_link">
+      <material>Gazebo/Red</material>
+
+      <sensor type="camera" name="${prefix}">
+        <update_rate>10.0</update_rate>
+        <camera name="${prefix}">
+          <pose>0 0 0 0 ${radians(-90)} ${radians(90)}</pose>
+          <horizontal_fov>1.3962634</horizontal_fov>
+          <image>
+            <width>800</width>
+            <height>600</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.02</near>
+            <far>300</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.007</stddev>
+          </noise>
+        </camera>
+        <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+          <alwaysOn>true</alwaysOn>
+          <updateRate>0.0</updateRate>
+          <cameraName>${prefix}</cameraName>
+          <imageTopicName>image_raw</imageTopicName>
+          <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+          <frameName>${prefix}_link</frameName>
+          <hackBaseline>0.0</hackBaseline>
+          <distortionK1>0.0</distortionK1>
+          <distortionK2>0.0</distortionK2>
+          <distortionK3>0.0</distortionK3>
+          <distortionT1>0.0</distortionT1>
+          <distortionT2>0.0</distortionT2>
+        </plugin>
+      </sensor>
+    </gazebo>
+  </xacro:macro>
+
+  <!-- prefix = stereo_camera -->
+  <xacro:macro name="stereo_camera_macro" params="parent prefix xyz">
+    <joint name="${prefix}_joint" type="fixed">
+      <parent link="${parent}"/>
+      <child  link="${prefix}_frame"/>
+      <!-- <origin xyz="${xyz}" rpy="0 0 0"/> -->
+      <origin xyz="${xyz}" rpy="0 -0.02967 0"/>   <!-- -1.7[deg] -->
+    </joint>
+
+    <link name="${prefix}_frame">
+      <visual>
+        <geometry>
+          <box size="0.03 0.06 0.03" />
+        </geometry>
+        <origin xyz="0 0 0" rpy="0 0 0 " />
+        <material name="red2"/>
+      </visual>
+    </link>
+    <gazebo reference="${prefix}_frame">
+      <material>Gazebo/Red</material>
+
+      <sensor type="multicamera" name="${prefix}">
+        <update_rate>30.0</update_rate>
+
+        <camera name="left">
+          <pose>0 0.035 0 0 0 0</pose>
+          <horizontal_fov>1.3962634</horizontal_fov>
+          <image>
+            <width>800</width>
+            <height>800</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.02</near>
+            <far>300</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.007</stddev>
+          </noise>
+        </camera>
+        <camera name="right">
+          <pose>0 0 0 0 0 0</pose>
+          <horizontal_fov>1.3962634</horizontal_fov>
+          <image>
+            <width>800</width>
+            <height>800</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.02</near>
+            <far>300</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.007</stddev>
+          </noise>
+        </camera>
+
+        <plugin name="stereo_camera_controller" filename="libgazebo_ros_multicamera.so">
+          <alwaysOn>true</alwaysOn>
+          <updateRate>0.0</updateRate>
+          <cameraName>${prefix}</cameraName>
+          <imageTopicName>image_raw</imageTopicName>
+          <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+          <frameName>${prefix}_optical_frame</frameName>
+          <!--<rightFrameName>right_camera_optical_frame</rightFrameName>-->
+          <hackBaseline>0.07</hackBaseline>
+          <distortionK1>0.0</distortionK1>
+          <distortionK2>0.0</distortionK2>
+          <distortionK3>0.0</distortionK3>
+          <distortionT1>0.0</distortionT1>
+          <distortionT2>0.0</distortionT2>
+        </plugin>
+      </sensor>
+    </gazebo>
+  </xacro:macro> 
+
+  <!-- rgbd_camera_macro2 prefix = rgbd_camera -->
+  <!-- http://gazebosim.org/tutorials?tut=ros_gzplugins -->
+  <!-- http://gazebosim.org/tutorials/?tut=ros_depth_camera -->
+  <xacro:macro name="rgbd_camera_macro2" params="parent prefix xyz">
+    <joint name="${prefix}_joint" type="fixed">
+      <parent link="${parent}"/>
+      <child  link="${prefix}_link"/>
+      <!-- <origin xyz="${xyz}" rpy="0 0 0"/> -->
+      <origin xyz="${xyz}" rpy="${radians(-90)} 0 ${radians(-90)}"/>  <!-- changed by nishi -->
+    </joint>
+    <link name="${prefix}_link">
+      <visual>
+        <geometry>
+          <box size="0.03 0.03 0.03" />
+        </geometry>
+        <origin xyz="0 0 0" rpy="0 0 0 " />
+        <material name="red2"/>
+      </visual>
+    </link>
+    <gazebo reference="${prefix}_link">
+      <material>Gazebo/Red</material>
+      <sensor name="${prefix}_camera" type="depth">
+        <update_rate>20</update_rate>
+        <camera>
+          <pose>0 0 0 0 ${radians(-90)} ${radians(90)}</pose>  <!-- add by nishi -->
+          <horizontal_fov>1.047198</horizontal_fov>
+          <image>
+            <width>640</width>
+            <height>480</height>
+            <!-- <format>R8G8B8</format> -->
+            <format>B8G8R8</format>
+          </image>
+          <clip>
+            <near>0.05</near>
+            <far>3</far>
+          </clip>
+        </camera>
+        <plugin name="${prefix}_controller" filename="libgazebo_ros_openni_kinect.so">
+          <baseline>0.2</baseline>
+          <alwaysOn>true</alwaysOn>
+          <updateRate>1.0</updateRate>
+          <cameraName>camera_ir</cameraName>
+          <imageTopicName>/camera/rgb/image_raw</imageTopicName>
+          <cameraInfoTopicName>/camera/rgb/camera_info</cameraInfoTopicName>
+          <depthImageTopicName>/camera/depth/image_raw</depthImageTopicName>
+          <depthImageInfoTopicName>/camera/depth/camera_info</depthImageInfoTopicName>
+          <pointCloudTopicName>/camera/depth/points</pointCloudTopicName>
+          <frameName>camera_link</frameName>                   
+          <!-- <pointCloudCutoff>0.5</pointCloudCutoff> -->
+          <pointCloudCutoff>0.2</pointCloudCutoff>  <!-- chaned by nishi -->
+          <pointCloudCutoffMax>3.0</pointCloudCutoffMax>
+          <distortionK1>0.00000001</distortionK1>
+          <distortionK2>0.00000001</distortionK2>
+          <distortionK3>0.00000001</distortionK3>
+          <distortionT1>0.00000001</distortionT1>
+          <distortionT2>0.00000001</distortionT2>
+          <CxPrime>0</CxPrime>
+          <Cx>0</Cx>
+          <Cy>0</Cy>
+          <focalLength>0</focalLength>
+          <hackBaseline>0</hackBaseline>
+        </plugin>
+      </sensor>
+    </gazebo>
+  </xacro:macro> 
+
+</robot>
