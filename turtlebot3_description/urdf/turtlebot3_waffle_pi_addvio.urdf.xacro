@@ -36,7 +36,7 @@
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <!-- <mass value="1.3729096e+00"/> -->
       <mass value="5.0"/>
-      <inertia ixx="8.7002718e-03" ixy="-4.7576583e-05" ixz="1.1160499e-04"
+      <inertia ixx="0.05" ixy="0.05" ixz="0.08"
                iyy="8.6195418e-03" iyz="-3.5422299e-06"
                izz="1.4612727e-02" />
     </inertial>
@@ -273,7 +273,7 @@
   <gazebo reference="wheel_left_link">
     <mu1>20.0</mu1>
     <mu2>5.0</mu2>
-    <kp>1000000.0</kp>
+    <kp>100000.0</kp>
     <kd>10.0</kd>
     <minDepth>0.001</minDepth>
     <maxVel>0.1</maxVel>
@@ -282,7 +282,7 @@
   <gazebo reference="wheel_right_link">
     <mu1>20.0</mu1>
     <mu2>5.0</mu2>
-    <kp>1000000.0</kp>
+    <kp>100000.0</kp>
     <kd>10.0</kd>
     <minDepth>0.001</minDepth>
     <maxVel>0.1</maxVel>
