@@ -268,7 +268,7 @@
       </plugin>
     </sensor>
   </gazebo>
-  <xacro:stereo_camera_macro prefix="stereo_camera" parent="base_link" xyz="0.075 0.0 0.09"/>
+  <!-- <xacro:stereo_camera_macro prefix="stereo_camera" parent="base_link" xyz="0.075 0.0 0.09"/> -->
   <!-- === Anti-slip settings for high speed === -->
   <gazebo reference="wheel_left_link">
     <mu1>20.0</mu1>
@@ -287,8 +287,8 @@
     <minDepth>0.001</minDepth>
     <maxVel>0.1</maxVel>
   </gazebo>
-  <!-- <xacro:sensor_d435 name="camera" topics_ns="camera" parent="base_link" publish_pointcloud="true">
+  <xacro:sensor_d435 name="camera" topics_ns="camera" parent="base_link" publish_pointcloud="true">
     <origin xyz="0.075 0.0 0.09" rpy="0 0 0" />
-  </xacro:sensor_d435> -->
+  </xacro:sensor_d435>
 
 </robot>
