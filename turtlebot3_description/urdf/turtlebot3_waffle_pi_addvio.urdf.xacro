@@ -252,6 +252,19 @@
       <!-- === End Mid360 === -->
   </gazebo>
 
+    <gazebo reference="base_footprint">
+    <sensor name='collision_sensor' type='contact'>
+      <contact>
+        <collision>base_footprint_fixed_joint_lump__base_link_collision</collision>
+      </contact>
+      <plugin name="collision_sensor" filename="libgazebo_collision_sensor.so">
+        <rosDebugLevel>na</rosDebugLevel>
+        <topicName>/gazebo/base_collision</topicName>
+        <updateRate>20.0</updateRate>
+      </plugin>
+    </sensor>
+  </gazebo>
+  
   <xacro:sensor_d435 name="camera" topics_ns="camera" parent="base_link" publish_pointcloud="true">
     <origin xyz="0.075 0.0 0.09" rpy="0 0 0" />
   </xacro:sensor_d435>
